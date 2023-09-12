@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Shayari Generator</h1>
+        <div class="input-container">
+          <input type="text" id="keyword" placeholder="Enter a keyword" />
+          <button onclick="shayariGen()">Generate</button>
+        </div>
+        <div id="shayari"></div>
+      </div>
+    </body>
+    <script>
+      async function shayariGen() {
+        const category = document.getElementById("keyword").value;
+  
+        if (!category) {
+          alert("Please enter a keyword.");
+          return;
+        }
+  
+        try {
+          const response = await fetch(
+            "https://localhost:8080/generate-shayari",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ category }),
+            }
+          );
+  
+          if (response.ok) {
+            const data = await response.json();
+            const shayari = data.shayariData;
+  
+            document.getElementById("shayari").textContent = shayari;
+          } else {
+            alert("Failed to generate Shayari. Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again later.");
+        }
+      }
+    </script>
+</body>
+</html>
